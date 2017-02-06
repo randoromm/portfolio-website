@@ -1,27 +1,49 @@
+var scl = 20;
+var snake;
+var food;
+
 function setup() {
-  var cnv = createCanvas(500, 500);
+  var cnv = createCanvas(scl * 25, scl * 25);
   cnv.parent('sketch-holder');
-  background(112, 112, 112);
+
+  snake = new Snake();
+  food = new Food();
+  frameRate(10);
 }
 
 function draw() {
-  ellipseMode(CENTER);
-  rectMode(CENTER);
+  background(100);
 
-  // Body
-  fill(255, 0, 100);
-  stroke(0, 0, 0);
-  rect(240, 145, 20, 100);
+  snake.eat(food);
+  snake.move();
+  food.draw();
+  snake.draw();
+}
 
-  // Head
-  ellipse(240, 115, 60, 60);
+function keyPressed() {
+  if (keyCode === UP_ARROW) {
+    snake.dir(0, -1);
+  }
+  else if (keyCode === DOWN_ARROW) {
+    snake.dir(0, 1);
+  }
+  else if (keyCode === RIGHT_ARROW) {
+    snake.dir(1, 0);
+  }
+  else if (keyCode === LEFT_ARROW) {
+    snake.dir(-1, 0);
+  }
+}
 
-  // Eyes
-  fill(0, 255, 100);
-  ellipse(221, 115, 16, 32);
-  ellipse(259, 115, 16, 32);
+function rows() {
+  return floor(height / scl);
+}
 
-  // Legs
-  line(230, 195, 220, 205);
-  line(250, 195, 260, 205);
+function cols() {
+  return floor(width / scl);
+}
+
+function randomVector() {
+  var vec = createVector(floor(random(cols())), floor(random(rows())));
+  return vec.mult(scl);
 }
